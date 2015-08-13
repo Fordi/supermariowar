@@ -142,14 +142,20 @@ if(USE_PNG_SAVE)
 	target_link_libraries(smw ${PNG_LIBRARY})
 endif()
 
-# Use YAML for game config files
 if (BUILD_STATIC_LIBS)
+	# Use YAML for game config files
 	include_directories(dependencies/yaml-cpp-noboost/include)
 	set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "YAML: Build testing and parse tools" FORCE)
 	set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "YAML: Build contrib stuff in library" FORCE)
 	add_subdirectory(dependencies/yaml-cpp-noboost)
+
+	# Use LZ4 for compression
+	include_directories(dependencies/lz4/lib)
+	set(BUILD_TOOLS OFF CACHE BOOL "LZ4: Build the command line tools" FORCE)
+	add_subdirectory(dependencies/lz4/cmake_unofficial)
 else()
 	find_package(yaml-cpp REQUIRED)
+	find_package(lz4 REQUIRED)
 endif()
 
 #-----------------------------------------------------------------------------
